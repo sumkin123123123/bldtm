@@ -3,28 +3,35 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace DTCompileTimeTracker {
-  public class CompileTimeTrackerData {
+namespace DTCompileTimeTracker 
+{
+  public class CompileTimeTrackerData 
+  {
     private const int kHistoryKeyframeMaxCount = 100;
 
-    public int StartTime {
+    public int StartTime
+    {
       get { return this._startTime; }
-      set {
+      set 
+      {
         this._startTime = value;
         this.Save();
       }
     }
 
-    public void AddCompileTimeKeyframe(CompileTimeKeyframe keyframe) {
+    public void AddCompileTimeKeyframe(CompileTimeKeyframe keyframe) 
+    {
       this._compileTimeHistory.Add(keyframe);
       this.Save();
     }
 
-    public IList<CompileTimeKeyframe> GetCompileTimeHistory() {
+    public IList<CompileTimeKeyframe> GetCompileTimeHistory() 
+    {
       return this._compileTimeHistory;
     }
 
-    public CompileTimeTrackerData(string editorPrefKey) {
+    public CompileTimeTrackerData(string editorPrefKey) 
+    {
       this._editorPrefKey = editorPrefKey;
       this.Load();
     }
@@ -35,8 +42,10 @@ namespace DTCompileTimeTracker {
 
     private string _editorPrefKey;
 
-    private void Save() {
-      while (this._compileTimeHistory.Count > CompileTimeTrackerData.kHistoryKeyframeMaxCount) {
+    private void Save() 
+    {
+      while (this._compileTimeHistory.Count > CompileTimeTrackerData.kHistoryKeyframeMaxCount) 
+      {
         this._compileTimeHistory.RemoveAt(0);
       }
 
@@ -44,12 +53,16 @@ namespace DTCompileTimeTracker {
       EditorPrefs.SetString(this._editorPrefKey + "._compileTimeHistory", CompileTimeKeyframe.SerializeList(this._compileTimeHistory));
     }
 
-    private void Load() {
+    private void Load() 
+    {
       this._startTime = EditorPrefs.GetInt(this._editorPrefKey + "._startTime");
       string key = this._editorPrefKey + "._compileTimeHistory";
-      if (EditorPrefs.HasKey(key)) {
+      if (EditorPrefs.HasKey(key)) 
+      {
         this._compileTimeHistory = CompileTimeKeyframe.DeserializeList(EditorPrefs.GetString(key));
-      } else {
+      } 
+      else 
+      {
         this._compileTimeHistory = new List<CompileTimeKeyframe>();
       }
     }

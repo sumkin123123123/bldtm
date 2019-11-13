@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace DTCompileTimeTracker {
+namespace DTCompileTimeTracker 
+{
   [Serializable]
-  public class CompileTimeKeyframe {
+  public class CompileTimeKeyframe 
+  {
     private const string kKeyframeDelimiter = "@";
     private const string kListDelimiter = "#";
 
     private static readonly string[] kKeyframeDelimiterArray = new string[] { CompileTimeKeyframe.kKeyframeDelimiter };
     private static readonly string[] kListDelimiterArray = new string[] { CompileTimeKeyframe.kListDelimiter };
 
-    public static CompileTimeKeyframe Deserialize(string serialized) {
+    public static CompileTimeKeyframe Deserialize(string serialized)
+    {
       string[] tokens = serialized.Split(CompileTimeKeyframe.kKeyframeDelimiterArray, StringSplitOptions.None);
-      if (tokens.Length != 3) {
+      if (tokens.Length != 3) 
+      {
         Debug.LogError("Failed to deserialize CompileTimeKeyframe because splitting by " + CompileTimeKeyframe.kKeyframeDelimiter + " did not result in 3 tokens!");
         return null;
       }
@@ -28,15 +32,18 @@ namespace DTCompileTimeTracker {
       return keyframe;
     }
 
-    public static string Serialize(CompileTimeKeyframe keyframe) {
-      if (keyframe == null) {
+    public static string Serialize(CompileTimeKeyframe keyframe) 
+    {
+      if (keyframe == null) 
+      {
         return "";
       }
 
       return string.Format("{1}{0}{2}{0}{3}", CompileTimeKeyframe.kKeyframeDelimiter, keyframe.elapsedCompileTimeInMS, keyframe.serializedDate, keyframe.hadErrors);
     }
 
-    public static List<CompileTimeKeyframe> DeserializeList(string serialized) {
+    public static List<CompileTimeKeyframe> DeserializeList(string serialized) 
+    {
       if (String.IsNullOrEmpty(serialized)) {
         return new List<CompileTimeKeyframe>();
       }
@@ -46,20 +53,24 @@ namespace DTCompileTimeTracker {
       return serializedKeyframes.Select(s => CompileTimeKeyframe.Deserialize(s)).Where(k => k != null).ToList();
     }
 
-    public static string SerializeList(List<CompileTimeKeyframe> keyframes) {
+    public static string SerializeList(List<CompileTimeKeyframe> keyframes) 
+    {
       string[] serializedKeyframes = keyframes.Where(k => k != null).Select(k => CompileTimeKeyframe.Serialize(k)).ToArray();
       return string.Join(CompileTimeKeyframe.kListDelimiter, serializedKeyframes);
     }
 
-    public static string ToCSV(CompileTimeKeyframe keyframe) {
-      if (keyframe == null) {
+    public static string ToCSV(CompileTimeKeyframe keyframe) 
+    {
+      if (keyframe == null) 
+      {
         return "";
       }
 
       return string.Format("{0},{1},{2}", keyframe._computedDate, keyframe.elapsedCompileTimeInMS, keyframe.hadErrors);
     }
 
-    public static string ToCSV(List<CompileTimeKeyframe> keyframes) {
+    public static string ToCSV(List<CompileTimeKeyframe> keyframes) 
+    {
       string[] serializedKeyframes = keyframes.Where(k => k != null).Select(k => CompileTimeKeyframe.ToCSV(k)).ToArray();
       string fields = "date,compile_time,had_errors\n";
       return fields + string.Join("\n", serializedKeyframes);

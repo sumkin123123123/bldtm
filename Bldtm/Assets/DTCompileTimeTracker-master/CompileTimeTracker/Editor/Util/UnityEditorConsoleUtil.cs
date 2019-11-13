@@ -4,19 +4,23 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace DTCompileTimeTracker {
-  public struct UnityConsoleCountsByType {
+namespace DTCompileTimeTracker 
+{
+  public struct UnityConsoleCountsByType 
+  {
     public int errorCount;
     public int warningCount;
     public int logCount;
   }
 
-  public static class UnityEditorConsoleUtil {
+  public static class UnityEditorConsoleUtil 
+  {
     private static MethodInfo _clearMethod;
     private static MethodInfo _getCountMethod;
     private static MethodInfo _getCountsByTypeMethod;
 
-    static UnityEditorConsoleUtil() {
+    static UnityEditorConsoleUtil() 
+    {
       Assembly assembly = Assembly.GetAssembly(typeof(SceneView));
       Type logEntriesType;
 #if UNITY_2017_1_OR_NEWER
@@ -30,8 +34,10 @@ namespace DTCompileTimeTracker {
       UnityEditorConsoleUtil._getCountsByTypeMethod = logEntriesType.GetMethod("GetCountsByType");
     }
 
-    public static void Clear() {
-      if (UnityEditorConsoleUtil._clearMethod == null) {
+    public static void Clear() 
+    {
+      if (UnityEditorConsoleUtil._clearMethod == null) 
+      {
         Debug.LogError("Failed to find LogEntries.Clear method info!");
         return;
       }
@@ -39,8 +45,10 @@ namespace DTCompileTimeTracker {
       UnityEditorConsoleUtil._clearMethod.Invoke(null, null);
     }
 
-    public static int GetCount() {
-      if (UnityEditorConsoleUtil._getCountMethod == null) {
+    public static int GetCount() 
+    {
+      if (UnityEditorConsoleUtil._getCountMethod == null) 
+      {
         Debug.LogError("Failed to find LogEntries.GetCount method info!");
         return 0;
       }
@@ -48,10 +56,12 @@ namespace DTCompileTimeTracker {
       return (int)UnityEditorConsoleUtil._getCountMethod.Invoke(null, null);
     }
 
-    public static UnityConsoleCountsByType GetCountsByType() {
+    public static UnityConsoleCountsByType GetCountsByType() 
+    {
       UnityConsoleCountsByType countsByType = new UnityConsoleCountsByType();
 
-      if (UnityEditorConsoleUtil._getCountsByTypeMethod == null) {
+      if (UnityEditorConsoleUtil._getCountsByTypeMethod == null) 
+      {
         Debug.LogError("Failed to find LogEntries.GetCountsByType method info!");
         return countsByType;
       }
